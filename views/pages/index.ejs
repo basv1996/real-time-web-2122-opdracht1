@@ -38,20 +38,41 @@ var messages = document.getElementById('messages');
 var form = document.getElementById('form');
 var input = document.getElementById('input');
 
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
-  if (input.value) {
-    socket.emit('chat message', input.value);
-    input.value = '';
-  }
+const name = prompt("what is your name?")
+appendMessage('You joined')
+socket.emit('new-user', name)
+
+socket.on('chat-message', (data)=> {
+  // var item = document.createElement('li');
+  // item.textContent = msg
+  // messages.appendChild(item)
+  window.scrollTo(0, document.body.scrollHeight);
+  appendMessage(`${data.name}: ${data.msg}`)
 });
 
-socket.on('chat message', function(msg) {
-  var item = document.createElement('li');
-  item.textContent = msg;
-  messages.appendChild(item);
-  window.scrollTo(0, document.body.scrollHeight);
+socket.on("user-connected", (name) => {
+  appendMessage(`${name} connected`)
+  console.log(socket.id) 
 });
+
+form.addEventListener('submit', e => {
+  e.preventDefault()
+  //if (input.value) {
+    const msg = input.value
+    appendMessage(`You: ${msg}`)
+    socket.emit('chat-message', msg)
+    input.value = ''
+  //}
+});
+
+function appendMessage(msg) {
+  const item = document.createElement('li');
+  item.textContent = msg
+  messages.appendChild(item)
+  //const messageElement = document.createElement('div')
+  //messageElement.innerText = msg
+  //messages.append(messageElement)
+}
 
 
 </script>
