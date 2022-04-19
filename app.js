@@ -10,8 +10,8 @@ require("dotenv").config();
 const PORT = process.env.PORT || 4242
 
 
-server.listen(4242, () => {
-  console.log('listening on *:4242');
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
 });
 
 //this will sorve static files from public folder
