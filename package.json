@@ -1,0 +1,28 @@
+{
+  "name": "real-time-web-2122-opdracht1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/basv1996/real-time-web-2122-opdracht1.git"
+  },
+  "author": "bas vugts",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/basv1996/real-time-web-2122-opdracht1/issues"
+  },
+  "homepage": "https://github.com/basv1996/real-time-web-2122-opdracht1#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
