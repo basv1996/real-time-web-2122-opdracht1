@@ -16,6 +16,7 @@
     </style>
   </head>
   <body>
+    <span id="count">0</span> user(s) online
     <ul id="messages"></ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
@@ -23,6 +24,10 @@
     <script src="socket.io/socket.io.js"></script>
 <script>
 var socket = io();
+
+socket.on('usercnt', (msg) => {
+  document.querySelector("#count").innerHTML=msg
+})
 
 var messages = document.getElementById('messages');
 var form = document.getElementById('form');
@@ -42,6 +47,8 @@ socket.on('chat message', function(msg) {
   messages.appendChild(item);
   window.scrollTo(0, document.body.scrollHeight);
 });
+
+
 </script>
   </body>
 </html>

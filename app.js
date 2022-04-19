@@ -7,6 +7,8 @@ const io = new Server(server);
 const path = require('path')
 require("dotenv").config();
 
+let userCount=0
+
 const PORT = process.env.PORT || 4242
 
 
@@ -39,9 +41,13 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('a user connected');
+  userCount++
+  io.emit('usercnt', userCount)
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
+    userCount--
+    io.emit('usercnt', userCount)
   });
 
   socket.on('chat message', (msg) => {
