@@ -8,7 +8,8 @@ const path = require('path')
 require("dotenv").config();
 
 let userCount=0
-const users = {}
+let users = {}
+let typers = {}
 
 const PORT = process.env.PORT || 4242
 
@@ -41,28 +42,39 @@ app.get('/', (req, res) => {
 
 
 io.on('connection', (socket) => {
-  //console.log('a user connected');
-  //console.log(socket.id);
   userCount++
   io.emit('usercnt', userCount)
 
   socket.on('new-user', name => {
     users[socket.id] = name
     socket.broadcast.emit('user-connected', name)
-    //socket.broadcast
   })
 
   socket.on('disconnect', () => {
-    //console.log('user disconnected');
     userCount--
     io.emit('usercnt', userCount)
     delete users[socket.id]
   });
 
-
   socket.on('chat-message', (msg) => {
     socket.broadcast.emit('chat-message', { msg: msg, name: users[socket.id] })
-    //io.emit('chat message', msg);
   });
 
+  socket.on('typing', name =>{
+    users[socket.id] = name
+    typers[socket.id] = 1;
+    console.log("naampje: ", name)
+    console.log("typersd socket id: ",  typers[socket.id] = 1)
+    console.log("object key length: ",  Object.keys(typers).length)
+    socket.broadcast.emit('typing', 
+    {
+      name: name,
+      typers: Object.keys(typers).length
+    });
+
+    socket.on("stop-typing", ()=>{
+      delete typers[socket.id]
+      socket.broadcast.emit("stop-typing")
+    })
+  })
 });

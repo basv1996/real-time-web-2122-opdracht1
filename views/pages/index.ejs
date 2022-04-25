@@ -18,11 +18,20 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
+
+      .feedback {
+    position: absolute;
+    width: 100vw;
+    height: 2em;
+    bottom: 3em;
+    background-color: rgba(255,140,140,0.5);
+}
     </style>
   </head>
   <body>
     <span id="count">0</span> user(s) online
     <ul id="messages"></ul>
+    <span class="feedback"></span>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
@@ -37,6 +46,7 @@ socket.on('usercnt', (msg) => {
 var messages = document.getElementById('messages');
 var form = document.getElementById('form');
 var input = document.getElementById('input');
+const feedbackTxt = document.querySelector(".feedback")
 
 const name = prompt("what is your name?")
 appendMessage('You joined')
@@ -54,6 +64,37 @@ socket.on("user-connected", (name) => {
   appendMessage(`${name} connected`)
   console.log(socket.id) 
 });
+
+socket.on("typing", ({name, typers}) => {
+  //console.log("testje")
+  //showWhoTyping(name)
+  feedbackTxt.textContent = typers > 1 ? 'Several people are typing' : `<i>${name}</i> is typing`;
+})
+
+socket.on("stop-typing", typers => {
+  if (!typers) {
+  feedbackTxt.textContent = ""
+  }
+
+})
+
+input.addEventListener("keyup", (e) =>{
+  socket.emit("typing", name)
+  //na vragen hoe ik er voor kan zorgen dat het bij de ander wordt getoond
+
+  if (e.keyCode === 13) {
+              socket.emit("stop-typing")
+              }
+ 
+})
+
+// function showWhoTyping(name) {
+//   //feedbackTxt.textContent = `${name}` + " is typing..."
+//   //if(!input.value == ""){
+//   feedbackTxt.textContent = `${name}` + " is typing..."
+//   console.log(name)
+//   //} else   {feedbackTxt.textContent = ""  }
+// }
 
 form.addEventListener('submit', e => {
   e.preventDefault()
